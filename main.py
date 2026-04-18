@@ -1,56 +1,74 @@
-class Book:
-    def __init__(self, title, author, status):
-        self.title = title
-        self.author = author
-        self.status = status
+class Kitob:
+    def __init__(self, nomi, muallifi, narxi):
+        self.nomi = nomi
+        self.muallifi = muallifi
+        self.narxi = narxi
+        self.holati = "Erkin"
 
-class User:
-    def __init__(self, name, email):
-        self.name = name
-        self.email = email
-        self.borrowed_books = []
+class Foydalanuvchi:
+    def __init__(self, ismi, familiyasi):
+        self.ismi = ismi
+        self.familiyasi = familiyasi
+        self.kitoblar = []
 
-class Library:
+class Kitobxona:
     def __init__(self):
-        self.books = []
-        self.users = []
+        self.kitoblar = []
+        self.foydalanuvchilar = []
 
-    def add_book(self, title, author):
-        self.books.append(Book(title, author, "available"))
+    def kitob_qo_sh(self, kitob):
+        self.kitoblar.append(kitob)
 
-    def add_user(self, name, email):
-        self.users.append(User(name, email))
+    def foydalanuvchi_qo_sh(self, foydalanuvchi):
+        self.foydalanuvchilar.append(foydalanuvchi)
 
-    def borrow_book(self, user_email, book_title):
-        user = next((u for u in self.users if u.email == user_email), None)
-        book = next((b for b in self.books if b.title == book_title), None)
-        if user and book and book.status == "available":
-            user.borrowed_books.append(book)
-            book.status = "borrowed"
+    def kitob_ol(self, foydalanuvchi, kitob):
+        if kitob.holati == "Erkin":
+            kitob.holati = "Borilmoqda"
+            foydalanuvchi.kitoblar.append(kitob)
         else:
-            print("Kitobga ega bo'lmaysiz")
+            print("Kitob borilmoqda")
 
-    def release_book(self, user_email, book_title):
-        user = next((u for u in self.users if u.email == user_email), None)
-        book = next((b for b in self.books if b.title == book_title), None)
-        if user and book and book.status == "borrowed":
-            user.borrowed_books.remove(book)
-            book.status = "available"
+    def kitob_qaytar(self, foydalanuvchi, kitob):
+        if kitob in foydalanuvchi.kitoblar:
+            foydalanuvchi.kitoblar.remove(kitob)
+            kitob.holati = "Erkin"
         else:
-            print("Kitobni qaytarib bo'lmaydi")
+            print("Sizda bunday kitob yo'q")
 
-    def print_borrowed_books(self, user_email):
-        user = next((u for u in self.users if u.email == user_email), None)
-        if user:
-            print([b.title for b in user.borrowed_books])
-        else:
-            print("Foydalanuvchi topilmadi")
+kitobxona = Kitobxona()
+kitob1 = Kitob("Olma", "Jaloliddin", 10000)
+kitob2 = Kitob("Anor", "Farrux", 15000)
+foydalanuvchi1 = Foydalanuvchi("Ali", "Valiyev")
+foydalanuvchi2 = Foydalanuvchi("Vali", "Aliyev")
 
-lib = Library()
-lib.add_book("Adabiyot", "Xalilullo")
-lib.add_book("Tarix", "Shokir")
-lib.add_user("Jaloliddin", "jaloliddin@email.com")
-lib.borrow_book("jaloliddin@email.com", "Adabiyot")
-lib.print_borrowed_books("jaloliddin@email.com")
-lib.release_book("jaloliddin@email.com", "Adabiyot")
-lib.print_borrowed_books("jaloliddin@email.com")
+kitobxona.kitob_qo_sh(kitob1)
+kitobxona.kitob_qo_sh(kitob2)
+kitobxona.foydalanuvchi_qo_sh(foydalanuvchi1)
+kitobxona.foydalanuvchi_qo_sh(foydalanuvchi2)
+
+kitobxona.kitob_ol(foydalanuvchi1, kitob1)
+kitobxona.kitob_ol(foydalanuvchi2, kitob2)
+kitobxona.kitob_qaytar(foydalanuvchi1, kitob1)
+
+class BorLog:
+    def __init__(self):
+        self.log = []
+
+    def qo_sh(self, foydalanuvchi, kitob, sana):
+        self.log.append((foydalanuvchi, kitob, sana))
+
+borlog = BorLog()
+borlog.qo_sh(foydalanuvchi1, kitob1, "2024-02-20")
+borlog.qo_sh(foydalanuvchi2, kitob2, "2024-02-21")
+
+class QaytarLog:
+    def __init__(self):
+        self.log = []
+
+    def qo_sh(self, foydalanuvchi, kitob, sana):
+        self.log.append((foydalanuvchi, kitob, sana))
+
+qaytarlog = QaytarLog()
+qaytarlog.qo_sh(foydalanuvchi1, kitob1, "2024-02-25")
+qaytarlog.qo_sh(foydalanuvchi2, kitob2, "2024-02-26")
